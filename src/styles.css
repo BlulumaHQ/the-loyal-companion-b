@@ -153,3 +153,18 @@
     color: var(--color-foreground);
   }
 }
+
+@theme inline {
+  --color-sage: #5F704A; --color-olive: #4E5E3C; --color-ink: #232B1D; --color-body: #4B5543;
+  --color-cream: #FCFAF5; --color-line: #E7E1D3; --color-lav: #BCA2C7; --color-plum: #8A6E9A;
+  --color-sand: #F2EEE3; --color-mist: #E4E7DC; --color-pale: #C9D0BE; --color-gold: #F2D98B;
+  --color-field: #D5CDB9; --color-foot: #C8D0BF;
+  --font-sans: Inter, sans-serif; --font-serif: Lora, serif; --font-hand: Caveat, cursive;
+}
+body { font-family: Inter, sans-serif; background: #FCFAF5; color: #232B1D; line-height: 1.6; }
+a { color: #4E5E3C; } a:hover { color: #2F3A28; }
+.trail { background-image: url(/images/paw-trail-sage.svg); background-size: 420px; }
+.trail-light { background-image: url(/images/paw-trail-light.svg); background-size: 420px; }
+.cta .pw { opacity: 0; transform: translate(-6px, 6px) rotate(-25deg); transition: all .25s; }
+.cta:hover .pw { opacity: 1; transform: none; }
+a.cta, a.cta:hover { color: #fff; text-decoration: none; }
