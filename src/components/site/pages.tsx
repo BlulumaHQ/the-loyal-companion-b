@@ -16,17 +16,17 @@ function Shell({ children }: { children: ReactNode }) {
   );
 }
 
-function PageHero({ kicker, title, word, intro, img, imgAlt }: { kicker: string; title: string; word: string; intro: string; img: string; imgAlt: string }) {
+function PageHero({ kicker, title, word, intro, img, imgAlt, pos = "center" }: { kicker: string; title: string; word: string; intro: string; img: string; imgAlt: string; pos?: string }) {
   return (
     <section className="max-w-[1200px] mx-auto px-6 py-14 flex flex-wrap gap-12 items-center">
       <div className="flex-[1_1_480px] min-w-0">
         <p className="mb-2 font-hand text-[28px] text-plum">{kicker}</p>
-        <h1 className="mb-5 font-serif font-semibold text-[clamp(40px,6.5vw,62px)] leading-[1.05]">{title} <Underline>{word}</Underline></h1>
+        <h1 className="mb-5 font-serif font-medium tracking-[-0.01em] text-[clamp(38px,6.5vw,64px)] leading-[1.04]">{title} <Underline>{word}</Underline></h1>
         <p className="mb-7 text-lg text-body">{intro}</p>
         <Cta className="px-[30px] py-4 text-[17px]">Book Your Grooming Appointment</Cta>
       </div>
       <div className="flex-[1_1_380px] min-w-0">
-        <img src={img} alt={imgAlt} className="w-full h-[clamp(280px,40vw,400px)] object-cover rounded-[200px_200px_24px_24px]" />
+        <img src={img} alt={imgAlt} className="w-full h-[clamp(280px,40vw,400px)] object-cover rounded-[200px_200px_24px_24px]" style={{ objectPosition: pos }} />
       </div>
     </section>
   );
@@ -177,7 +177,7 @@ export function AboutPage() {
   const grid = "grid items-start gap-6 [grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))]";
   return (
     <Shell>
-      <PageHero kicker="About us" title="The Heart Behind" word="The Loyal Companion" intro={ABOUT_INTRO} img="/images/glowup-patch.jpg" imgAlt="Patch, freshly groomed" />
+      <PageHero kicker="About us" title="The Heart Behind" word="The Loyal Companion" intro={ABOUT_INTRO} img="/images/glowup-patch.jpg" imgAlt="Patch, freshly groomed" pos="center 20%" />
       <SageBand>
         <h2 className={h2}>Meet the Loyal Crew</h2>
         <p className="mt-2 text-white/90">The people (and Labs) who'll take care of your dog.</p>
