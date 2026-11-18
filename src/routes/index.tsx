@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header, Hero, Stats, Trust, Reviews, Crew, Prices, FirstVisit, Shop, Faq, Visit, FinalCta, Footer } from "@/components/site/sections";
 
-export const SITE_URL = "https://theloyalcompanionplatteville.com";
+import { SITE_URL } from "@/content/site";
 const title = "Dog Grooming in Platteville, WI | The Loyal Companion";
 const description = "Locally owned dog grooming salon and pet shop on Main Street in Platteville, WI. Gentle grooming from people who treat your dog like family. Book online.";
 

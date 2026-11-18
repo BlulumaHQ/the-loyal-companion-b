@@ -1,7 +1,9 @@
 import type { CSSProperties, ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
+import { REVIEW, MAP_EMBED } from "@/content/site";
 
 export const BOOK = "https://theloyalcompanion.franpos.co/appointment/";
-const h2 = "font-serif font-bold text-[clamp(28px,5vw,40px)] leading-tight";
+export const h2 = "font-serif font-bold text-[clamp(28px,5vw,40px)] leading-tight";
 
 export function Paw({ size, style, hover }: { size: number; style?: CSSProperties; hover?: boolean }) {
   return (
@@ -10,8 +12,8 @@ export function Paw({ size, style, hover }: { size: number; style?: CSSPropertie
     </svg>
   );
 }
-const PawBullet = () => <Paw size={14} style={{ fill: "#BCA2C7", flex: "none" }} />;
-function Underline({ children }: { children: ReactNode }) {
+export const PawBullet = () => <Paw size={14} style={{ fill: "#BCA2C7", flex: "none" }} />;
+export function Underline({ children }: { children: ReactNode }) {
   return (
     <span className="relative inline-block">{children}
       <svg viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true" className="absolute left-0 -bottom-[6px] w-full h-[14px]">
@@ -20,24 +22,25 @@ function Underline({ children }: { children: ReactNode }) {
     </span>
   );
 }
-function Cta({ children, className = "", pawSize = 18 }: { children: ReactNode; className?: string; pawSize?: number }) {
+export function Cta({ children, className = "", pawSize = 18 }: { children: ReactNode; className?: string; pawSize?: number }) {
   return (
     <a className={`cta bg-sage rounded-full inline-flex items-center gap-[10px] font-bold ${className}`} href={BOOK} target="_blank" rel="noopener">
       {children} <Paw hover size={pawSize} style={{ fill: "#fff" }} />
     </a>
   );
 }
-const SCALLOP = "M0 40 V20" + " a40 20 0 0 1 80 0".repeat(18) + " V40 Z";
+export const SCALLOP = "M0 40 V20" + " a40 20 0 0 1 80 0".repeat(18) + " V40 Z";
 
 export function Header() {
   return (
     <header className="bg-cream border-b border-line">
       <div className="max-w-[1200px] mx-auto px-6 py-[14px] flex flex-wrap items-center justify-between gap-[14px]">
-        <img src="/images/logo.png" alt="The Loyal Companion" className="h-14" />
+        <Link to="/"><img src="/images/logo.png" alt="The Loyal Companion" className="h-14" /></Link>
         <nav className="flex flex-wrap items-center gap-[22px] text-[15px] font-semibold">
-          {[["Our Crew", "#crew"], ["Grooming", "#services"], ["Shop & Nutrition", "#shop"], ["Visit", "#visit"]].map(([l, h]) => (
-            <a key={h} href={h} className="!text-ink no-underline">{l}</a>
-          ))}
+          <Link to="/about" className="!text-ink no-underline" activeProps={{ className: "underline decoration-lav decoration-[3px] underline-offset-8" }}>Our Crew</Link>
+          <Link to="/grooming" className="!text-ink no-underline" activeProps={{ className: "underline decoration-lav decoration-[3px] underline-offset-8" }}>Grooming</Link>
+          <a href="/#shop" className="!text-ink no-underline">Shop &amp; Nutrition</a>
+          <Link to="/contact" className="!text-ink no-underline" activeProps={{ className: "underline decoration-lav decoration-[3px] underline-offset-8" }}>Visit</Link>
           <Cta className="px-[22px] py-3 min-h-[44px] gap-2 font-semibold" pawSize={15}>Book Grooming</Cta>
         </nav>
       </div>
@@ -54,7 +57,7 @@ export function Hero() {
         <p className="mb-7 text-lg text-body">Ashley and Brett opened The Loyal Companion as a dream come true — a calm, caring salon and pet shop where every companion is family and every person feels at home.</p>
         <div className="flex flex-wrap gap-3">
           <Cta className="px-[30px] py-4 text-[17px]">Book your dog's groom</Cta>
-          <a href="#crew" className="border-2 border-pale px-[26px] py-[14px] rounded-full font-bold text-[17px] !text-ink">Meet the crew</a>
+          <Link to="/about" className="border-2 border-pale px-[26px] py-[14px] rounded-full font-bold text-[17px] !text-ink">Meet the crew</Link>
         </div>
       </div>
       <div className="flex-[1_1_420px] min-w-0 relative">
@@ -102,7 +105,7 @@ export function Reviews() {
       <div className="max-w-[1200px] mx-auto px-6 pt-12 pb-[72px] grid md:grid-cols-2 gap-6">
         <div className="bg-white/[0.12] rounded-[20px] p-8">
           <p className="mb-3 text-gold text-xl tracking-[3px]">★★★★★</p>
-          <p className="mb-4 font-serif text-[clamp(19px,2.5vw,22px)] leading-[1.5]">“Amazing experience! Extremely efficient, kind and intentional! Absolutely loved my experience and will be back.”</p>
+          <p className="mb-4 font-serif text-[clamp(19px,2.5vw,22px)] leading-[1.5]">“{REVIEW.text}”</p>
           <p className="font-semibold">Jenna M. · Google</p>
         </div>
         <div className="bg-white/[0.12] rounded-[20px] p-8 flex flex-col justify-center">
@@ -124,6 +127,7 @@ export function Crew() {
         {t.map(([i, n, r]) => <div key={i}><img src={`/images/${i}.jpg`} alt={n} className="w-full h-[220px] object-cover rounded-[18px] mb-2" /><div className="font-bold">{n}</div><div className="text-sm text-body">{r}</div></div>)}
       </div>
       <p className="mt-5 text-[15px] text-body">Plus <strong>Sam</strong>, our Lead Groomer &amp; Fluff Officer with 13 years of experience.</p>
+      <Link to="/about" className="mt-3 inline-block font-bold">Read everyone's story →</Link>
     </section>
   );
 }
@@ -141,6 +145,7 @@ export function Prices() {
             <strong className="pl-6 sm:pl-0">{pr}</strong>
           </div>
         ))}
+        <Link to="/grooming" className="mt-6 inline-block font-bold">See every size, add-on &amp; spa ritual →</Link>
       </div>
     </section>
   );
@@ -171,7 +176,7 @@ export function Shop() {
             <img src="/images/brand-bark-bistro.png" alt="Bark Bistro" className="h-[54px]" />
             <img src="/images/brand-proactive-paws.jpg" alt="Proactive Paws" className="h-[52px] rounded-lg" />
           </div>
-          <a href="#visit" className="font-bold">Visit the store →</a>
+          <Link to="/contact" className="font-bold">Visit the store →</Link>
         </div>
         <div className="bg-white rounded-[22px] p-8">
           <h2 className="mb-2 font-serif text-[30px] font-bold">Nutrition help</h2>
@@ -216,7 +221,7 @@ export function Visit() {
           <label className="flex flex-col gap-1 text-sm font-semibold">Message<textarea className={input} rows={4} name="message" /></label>
           <button type="button" className="bg-sage text-white p-[14px] rounded-full font-bold min-h-[44px]">Send</button>
         </form>
-        <div className="min-h-[420px] rounded-[22px] bg-mist flex items-center justify-center font-semibold text-olive">Google Map</div>
+        <iframe title="Map to The Loyal Companion, 55 W Main St, Platteville" src={MAP_EMBED} loading="lazy" className="min-h-[420px] h-full w-full rounded-[22px] border-0" />
       </div>
     </section>
   );
@@ -237,7 +242,7 @@ export function Footer() {
       <div className="max-w-[1200px] mx-auto flex flex-wrap justify-between gap-4">
         <p>© 2026 The Loyal Companion. Website by <a href="https://swiftlift.app" target="_blank" rel="noopener" className="!text-white">SwiftLift</a></p>
         <div className="flex flex-wrap gap-4">
-          {[["Facebook", "https://facebook.com/theloyalcompanionplatteville"], ["Instagram", "https://instagram.com/theloyalcompanionplatteville"], ["TikTok", "https://tiktok.com/@theloyalcompanionwi"], ["Privacy", "#"]].map(([l, h]) => <a key={l} href={h} target={h === "#" ? undefined : "_blank"} rel="noopener" className="!text-white">{l}</a>)}
+          {[["Facebook", "https://facebook.com/theloyalcompanionplatteville"], ["Instagram", "https://instagram.com/theloyalcompanionplatteville"], ["TikTok", "https://tiktok.com/@theloyalcompanionwi"], ["Contact", "/contact"]].map(([l, h]) => <a key={l} href={h} target={h.startsWith("/") ? undefined : "_blank"} rel="noopener" className="!text-white">{l}</a>)}
         </div>
       </div>
     </footer>
