@@ -204,7 +204,7 @@ export function Visit() {
           <p><a href="tel:6085684558">608-568-4558</a> · call or text</p>
           <p className="mb-4 break-all"><a href="mailto:theloyalcompanionplatteville@gmail.com">theloyalcompanionplatteville@gmail.com</a></p>
           <div className="grid grid-cols-2 gap-x-4 text-[15px]">
-            {[["Wednesday", "9am – 5pm"], ["Thu – Fri", "9am – 7pm"], ["Saturday", "9am – 3pm"], ["Tuesday", "Grooming only"], ["Sun · Mon", "Closed"]].map(([d, h]) => <div key={d} className="contents"><span className="font-semibold">{d}</span><span>{h}</span></div>)}
+            {([["Wednesday", "9am – 5pm"], ["Thu – Fri", "9am – 7pm"], ["Saturday", "9am – 3pm"], ["Tuesday", "Grooming only"], ["Sun · Mon", "Closed"]] as const).map(([d, h]) => <div key={d} className="contents"><span className="font-semibold">{d}</span><span>{h}</span></div>)}
           </div>
           <img src="/images/storefront.jpg" alt="Storefront on Main Street" className="w-full h-[260px] object-cover rounded-[18px] mt-5" />
         </div>
