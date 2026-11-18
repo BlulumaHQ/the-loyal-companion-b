@@ -47,12 +47,22 @@ function isH3SwallowedErrorBody(body: string): boolean {
 // Hosting compresses every response at the edge. Never compress a body (gzip, brotli,
 // CompressionStream) or set content-encoding here or in a server route: the body gets encoded
 // twice and renders garbled.
+// Preview hosts (workers.dev / lovable.app / netlify.app) must never be indexed.
+// The client's real domain is unaffected.
+const PREVIEW_HOST = /(\.workers\.dev|\.lovable\.app|\.netlify\.app)$/i;
+function withNoindex(request: Request, response: Response): Response {
+  if (!PREVIEW_HOST.test(new URL(request.url).hostname)) return response;
+  const res = new Response(response.body, response);
+  res.headers.set("X-Robots-Tag", "noindex, nofollow");
+  return res;
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      return withNoindex(request, await normalizeCatastrophicSsrResponse(response));
     } catch (error) {
       console.error(error);
       return new Response(renderErrorPage(), {
