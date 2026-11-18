@@ -174,7 +174,7 @@ export const CREW: Member[] = [
   {
     name: "Sam",
     role: "Lead Groomer & Fluff Officer",
-    img: "/images/logo-circle.png",
+    img: "/images/logo-round.png",
     bio: [
       "Hi! I’m Sam! I’ve been grooming for 13 years, and I still love getting to know all the different personalities that come through the door. Every dog is different, and that’s definitely part of what keeps grooming fun for me!",
       "Some of my favorite breeds to groom are Schnauzers and Pomeranians. I also have a huge soft spot for bully breeds.",

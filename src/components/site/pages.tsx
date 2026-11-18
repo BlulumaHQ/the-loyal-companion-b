@@ -147,7 +147,7 @@ export function GroomingPage() {
 /* ---------------- About ---------------- */
 function CrewCard({ m }: { m: Member }) {
   const [open, setOpen] = useState(false);
-  const isLogo = m.img?.includes("logo-circle");
+  const isLogo = m.img?.includes("logo-round");
   const [first, ...rest] = m.bio;
   return (
     <article id={m.name.toLowerCase()} className="scroll-mt-6 flex flex-col bg-white border border-line rounded-[22px] overflow-hidden">
