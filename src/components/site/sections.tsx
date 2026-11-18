@@ -1,9 +1,9 @@
-import type { CSSProperties, ReactNode } from "react";
+import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { REVIEW, MAP_EMBED } from "@/content/site";
+import { REVIEWS, MAP_EMBED } from "@/content/site";
 
 export const BOOK = "https://theloyalcompanion.franpos.co/appointment/";
-export const h2 = "font-serif font-bold text-[clamp(28px,5vw,40px)] leading-tight";
+export const h2 = "font-serif font-semibold text-[clamp(34px,5.5vw,50px)] leading-[1.05]";
 
 export function Paw({ size, style, hover }: { size: number; style?: CSSProperties; hover?: boolean }) {
   return (
@@ -34,8 +34,8 @@ export const SCALLOP = "M0 40 V20" + " a40 20 0 0 1 80 0".repeat(18) + " V40 Z";
 export function Header() {
   return (
     <header className="bg-cream border-b border-line">
-      <div className="max-w-[1200px] mx-auto px-6 py-[14px] flex flex-wrap items-center justify-between gap-[14px]">
-        <Link to="/"><img src="/images/logo.png" alt="The Loyal Companion" className="h-14" /></Link>
+      <div className="max-w-[1200px] mx-auto px-6 py-2 flex flex-wrap items-center justify-between gap-[14px]">
+        <Link to="/" className="shrink-0"><img src="/images/logo.png" alt="The Loyal Companion" className="h-[80px] md:h-[112px] w-auto" /></Link>
         <nav className="flex flex-wrap items-center gap-[22px] text-[15px] font-semibold">
           <Link to="/about" className="!text-ink no-underline" activeProps={{ className: "underline decoration-lav decoration-[3px] underline-offset-8" }}>Our Crew</Link>
           <Link to="/grooming" className="!text-ink no-underline" activeProps={{ className: "underline decoration-lav decoration-[3px] underline-offset-8" }}>Grooming</Link>
@@ -48,21 +48,45 @@ export function Header() {
   );
 }
 
+const SLIDES = [
+  ["/images/hero-1.jpg", "Golden retriever relaxing during a gentle bath", "center 40%"],
+  ["/images/hero-3.jpg", "Doodle getting a professional blowout", "center 30%"],
+  ["/images/hero-2.jpg", "Fluffy pup during bath time", "center 35%"],
+  ["/images/hero-4.jpg", "Yorkie getting a personalized trim", "center 35%"],
+];
+
 export function Hero() {
+  const [i, setI] = useState(0);
+  const [paused, setPaused] = useState(false);
+  useEffect(() => {
+    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setInterval(() => setI((n) => (n + 1) % SLIDES.length), 5500);
+    return () => clearInterval(t);
+  }, [paused]);
+  const go = (d: number) => setI((n) => (n + d + SLIDES.length) % SLIDES.length);
   return (
-    <section className="max-w-[1200px] mx-auto px-6 py-14 flex flex-wrap gap-12 items-center">
-      <div className="flex-[1_1_480px] min-w-0">
-        <p className="mb-2 font-hand text-[28px] text-plum">Locally owned in Platteville, WI</p>
-        <h1 className="mb-5 font-serif font-bold text-[clamp(34px,6vw,52px)] leading-[1.12]">Gentle dog grooming from people who treat your dog like <Underline>family</Underline>.</h1>
-        <p className="mb-7 text-lg text-body">Ashley and Brett opened The Loyal Companion as a dream come true — a calm, caring salon and pet shop where every companion is family and every person feels at home.</p>
+    <section className="relative isolate h-[clamp(560px,82vh,780px)] w-full overflow-hidden bg-ink" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} aria-roledescription="carousel" aria-label="Our happy pups">
+      {SLIDES.map(([src, alt, pos], n) => (
+        <img key={src} src={src} alt={alt} loading={n ? "lazy" : "eager"} aria-hidden={n !== i}
+          className={`absolute inset-0 -z-10 h-full w-full object-cover transition-opacity duration-[1200ms] ${n === i ? "opacity-100" : "opacity-0"}`} style={{ objectPosition: pos }} />
+      ))}
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(35,43,29,0.85)_0%,rgba(35,43,29,0.55)_45%,rgba(35,43,29,0.05)_80%)]" />
+      <div className="max-w-[1200px] mx-auto h-full px-6 pb-20 flex flex-col justify-end text-white">
+        <p className="mb-2 font-hand text-[28px] text-lav">Locally owned in Platteville, WI</p>
+        <h1 className="max-w-[760px] mb-5 font-serif font-semibold text-[clamp(42px,7vw,72px)] leading-[1.02]">Gentle dog grooming from people who treat your dog like <Underline>family</Underline>.</h1>
+        <p className="max-w-[560px] mb-8 text-lg text-white/90">Ashley and Brett opened The Loyal Companion as a dream come true — a calm, caring salon and pet shop where every companion is family and every person feels at home.</p>
         <div className="flex flex-wrap gap-3">
           <Cta className="px-[30px] py-4 text-[17px]">Book your dog's groom</Cta>
-          <Link to="/about" className="border-2 border-pale px-[26px] py-[14px] rounded-full font-bold text-[17px] !text-ink">Meet the crew</Link>
+          <Link to="/about" className="border-2 border-white/80 px-[26px] py-[14px] rounded-full font-bold text-[17px] !text-white no-underline">Meet the crew</Link>
         </div>
       </div>
-      <div className="flex-[1_1_420px] min-w-0 relative">
-        <img src="/images/golden-wash.jpg" alt="Golden retriever relaxing during a gentle bath" className="w-full h-[clamp(320px,50vw,460px)] object-cover rounded-[220px_220px_24px_24px]" />
-        <img src="/images/logo-circle.jpg" alt="" className="absolute left-[-10px] md:left-[-22px] bottom-[-22px] w-[104px] h-[104px] rounded-full border-[5px] border-cream" />
+      <div className="absolute right-6 bottom-8 flex items-center gap-3 md:right-[max(24px,calc((100vw-1200px)/2+24px))]">
+        <button type="button" onClick={() => go(-1)} aria-label="Previous photo" className="grid h-11 w-11 place-items-center rounded-full border-2 border-white/70 text-xl text-white hover:bg-white/15">‹</button>
+        {SLIDES.map((_, n) => (
+          <button key={n} type="button" onClick={() => setI(n)} aria-label={`Show photo ${n + 1}`} aria-current={n === i}
+            className={`h-2.5 rounded-full transition-all ${n === i ? "w-8 bg-lav" : "w-2.5 bg-white/60"}`} />
+        ))}
+        <button type="button" onClick={() => go(1)} aria-label="Next photo" className="grid h-11 w-11 place-items-center rounded-full border-2 border-white/70 text-xl text-white hover:bg-white/15">›</button>
       </div>
     </section>
   );
@@ -71,7 +95,7 @@ export function Hero() {
 export function Stats() {
   const s = [["20+ yrs", "Owners as dog parents"], ["13 yrs", "Lead groomer experience"], ["8 spa rituals", "Add-ons for skin, coat, teeth & paws"], ["Included", "Nails & ears, every groom"]];
   return (
-    <section className="trail bg-white border-y border-line">
+    <section className="bg-white border-y border-line">
       <div className="max-w-[1200px] mx-auto px-6 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
         {s.map(([n, l]) => <div key={n}><div className="font-serif text-[clamp(26px,4vw,36px)] font-bold text-olive leading-tight">{n}</div><div className="text-sm text-body">{l}</div></div>)}
       </div>
@@ -90,7 +114,7 @@ export function Trust() {
         {c.map(([img, t, d, pos]) => (
           <div key={t} className="bg-white border border-line rounded-[22px] overflow-hidden">
             <img src={`/images/${img}`} alt={t} className="w-full h-[170px] object-cover" style={{ objectPosition: pos }} />
-            <div className="p-6"><h3 className="font-serif text-[22px] font-semibold mb-2">{t}</h3><p className="text-[15px] text-body">{d}</p></div>
+            <div className="p-6"><h3 className="font-serif text-[26px] font-semibold mb-2">{t}</h3><p className="text-[15px] text-body">{d}</p></div>
           </div>
         ))}
       </div>
@@ -99,19 +123,39 @@ export function Trust() {
 }
 
 export function Reviews() {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setInterval(() => setI((n) => (n + 1) % REVIEWS.length), 7000);
+    return () => clearInterval(t);
+  }, [i]);
+  const go = (d: number) => setI((n) => (n + d + REVIEWS.length) % REVIEWS.length);
   return (
-    <section className="trail-light bg-sage text-white">
-      <svg viewBox="0 0 1440 40" preserveAspectRatio="none" aria-hidden="true" className="block w-full h-10 bg-cream"><path d={SCALLOP} fill="#5F704A" /></svg>
-      <div className="max-w-[1200px] mx-auto px-6 pt-12 pb-[72px] grid md:grid-cols-2 gap-6">
-        <div className="bg-white/[0.12] rounded-[20px] p-8">
-          <p className="mb-3 text-gold text-xl tracking-[3px]">★★★★★</p>
-          <p className="mb-4 font-serif text-[clamp(19px,2.5vw,22px)] leading-[1.5]">“{REVIEW.text}”</p>
-          <p className="font-semibold">Jenna M. · Google</p>
+    <section className="relative overflow-hidden bg-white border-y border-line px-6 pt-20 pb-44" aria-roledescription="carousel" aria-label="Google reviews">
+      <img src="/images/paw-wave.svg" alt="" aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-3 h-[150px] w-full" />
+      <h2 className={`${h2} text-center mb-10 relative`}>Loved by Platteville pups</h2>
+      <div className="relative max-w-[920px] mx-auto flex items-center gap-4 md:gap-8">
+        <button type="button" onClick={() => go(-1)} aria-label="Previous review" className="hidden sm:grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-sage bg-white text-2xl text-sage">‹</button>
+        <div className="min-w-0 flex-1 overflow-hidden">
+          <div className="flex transition-transform duration-500 ease-out" style={{ transform: `translateX(-${i * 100}%)` }}>
+            {REVIEWS.map((r, n) => (
+              <figure key={r.name} className="m-0 w-full shrink-0 px-1 text-center" aria-hidden={n !== i}>
+                <div className="mb-5 flex justify-center gap-1.5" role="img" aria-label="5 out of 5">
+                  {[0, 1, 2, 3, 4].map((k) => <Paw key={k} size={26} style={{ fill: "#BCA2C7" }} />)}
+                </div>
+                <blockquote className="m-0 font-serif text-[clamp(24px,3.4vw,34px)] leading-[1.3]">“{r.text}”</blockquote>
+                <figcaption className="mt-5 font-semibold text-olive">{r.name} · Google Review</figcaption>
+              </figure>
+            ))}
+          </div>
+          <div className="mt-8 flex justify-center gap-2">
+            {REVIEWS.map((r, n) => (
+              <button key={r.name} type="button" onClick={() => setI(n)} aria-label={`Show review ${n + 1}`} aria-current={n === i}
+                className={`h-2.5 rounded-full transition-all ${n === i ? "w-8 bg-sage" : "w-2.5 bg-ink/25"}`} />
+            ))}
+          </div>
         </div>
-        <div className="bg-white/[0.12] rounded-[20px] p-8 flex flex-col justify-center">
-          <p className="mb-3 font-serif text-[22px]">Loved by Platteville pups</p>
-          <a href="https://www.google.com/search?q=The+Loyal+Companion+Platteville+WI" target="_blank" rel="noopener" className="!text-white font-bold">Read our Google reviews →</a>
-        </div>
+        <button type="button" onClick={() => go(1)} aria-label="Next review" className="hidden sm:grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-sage bg-white text-2xl text-sage">›</button>
       </div>
     </section>
   );
@@ -165,21 +209,20 @@ export function FirstVisit() {
 
 export function Shop() {
   return (
-    <section id="shop" className="trail bg-sand px-6 py-[72px]">
+    <section id="shop" className="bg-sand px-6 py-[72px]">
       <div className="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-6">
         <div className="bg-white rounded-[22px] p-8">
-          <h2 className="mb-2 font-serif text-[30px] font-bold">The Shop</h2>
+          <h2 className="mb-2 font-serif text-[34px] font-bold">The Shop</h2>
           <p className="mb-4 text-body">Treats, toys, accessories and wellness products from brands we trust.</p>
-          <div className="flex flex-wrap items-center gap-[14px] mb-4">
-            <img src="/images/brand-fido-vite.png" alt="Fido Vite" className="h-[50px]" />
-            <img src="/images/brand-adored-beast.png" alt="Adored Beast" className="h-[30px]" />
-            <img src="/images/brand-bark-bistro.png" alt="Bark Bistro" className="h-[54px]" />
-            <img src="/images/brand-proactive-paws.jpg" alt="Proactive Paws" className="h-[52px] rounded-lg" />
+          <div className="grid grid-cols-2 gap-3 mb-5">
+            {[["brand-fido-vite.png", "Fido Vite", "h-[76px]"], ["brand-adored-beast.png", "Adored Beast Apothecary", "h-[42px]"], ["brand-bark-bistro.png", "Bark Bistro", "h-[92px]"], ["brand-proactive-paws.jpg", "Proactive Paws", "h-[96px] rounded-lg"]].map(([f, a, h]) => (
+              <span key={f} className="flex h-[136px] items-center justify-center rounded-[16px] border border-line bg-cream px-4"><img src={`/images/${f}`} alt={a} className={`${h} w-auto max-w-full object-contain`} /></span>
+            ))}
           </div>
           <Link to="/contact" className="font-bold">Visit the store →</Link>
         </div>
         <div className="bg-white rounded-[22px] p-8">
-          <h2 className="mb-2 font-serif text-[30px] font-bold">Nutrition help</h2>
+          <h2 className="mb-2 font-serif text-[34px] font-bold">Nutrition help</h2>
           <p className="mb-3 text-body">Quality food and supplements, with a personal pet nutrition consultant to help you choose.</p>
           <a href="tel:6085684558" className="font-bold">Ask us →</a>
         </div>
@@ -215,7 +258,7 @@ export function Visit() {
         </div>
         {/* TODO: wire up form submission */}
         <form className="bg-cream border border-line rounded-[22px] p-7 flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
-          <h3 className="font-serif text-[22px] font-semibold">Send us a message</h3>
+          <h3 className="font-serif text-[26px] font-semibold">Send us a message</h3>
           <label className="flex flex-col gap-1 text-sm font-semibold">Name<input className={input} name="name" /></label>
           <label className="flex flex-col gap-1 text-sm font-semibold">Email<input className={input} type="email" name="email" /></label>
           <label className="flex flex-col gap-1 text-sm font-semibold">Message<textarea className={input} rows={4} name="message" /></label>
@@ -229,7 +272,7 @@ export function Visit() {
 
 export function FinalCta() {
   return (
-    <section className="trail px-6 py-16 text-center">
+    <section className="px-6 py-16 text-center">
       <h2 className={`${h2} mb-4`}>Your dog is in good hands.</h2>
       <Cta className="px-[34px] py-[18px] text-lg">Book Grooming</Cta>
     </section>
@@ -239,10 +282,11 @@ export function FinalCta() {
 export function Footer() {
   return (
     <footer className="bg-ink text-foot px-6 py-8 text-sm">
-      <div className="max-w-[1200px] mx-auto flex flex-wrap justify-between gap-4">
+      <div className="max-w-[1200px] mx-auto flex flex-wrap items-center justify-between gap-4">
+        <img src="/images/lavender-badge.png" alt="Dogs · People · Community · Belonging" className="h-[104px] w-[104px] rounded-full bg-white p-1" />
         <p>© 2026 The Loyal Companion. Website by <a href="https://swiftlift.app" target="_blank" rel="noopener" className="!text-white">SwiftLift</a></p>
         <div className="flex flex-wrap gap-4">
-          {[["Facebook", "https://facebook.com/theloyalcompanionplatteville"], ["Instagram", "https://instagram.com/theloyalcompanionplatteville"], ["TikTok", "https://tiktok.com/@theloyalcompanionwi"], ["Contact", "/contact"]].map(([l, h]) => <a key={l} href={h} target={h.startsWith("/") ? undefined : "_blank"} rel="noopener" className="!text-white">{l}</a>)}
+          {[["Facebook", "https://facebook.com/theloyalcompanionplatteville"], ["Instagram", "https://instagram.com/theloyalcompanionplatteville"], ["TikTok", "https://tiktok.com/@theloyalcompanionwi"], ["Contact", "/contact"]].map(([l, h]) => <a key={l} href={h} target={h?.startsWith("/") ? undefined : "_blank"} rel="noopener" className="!text-white">{l}</a>)}
         </div>
       </div>
     </footer>

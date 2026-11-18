@@ -159,7 +159,7 @@
   --color-cream: #FCFAF5; --color-line: #E7E1D3; --color-lav: #BCA2C7; --color-plum: #8A6E9A;
   --color-sand: #F2EEE3; --color-mist: #E4E7DC; --color-pale: #C9D0BE; --color-gold: #F2D98B;
   --color-field: #D5CDB9; --color-foot: #C8D0BF;
-  --font-sans: Inter, sans-serif; --font-serif: Lora, serif; --font-hand: Caveat, cursive;
+  --font-sans: Inter, sans-serif; --font-serif: "Cormorant Garamond", Georgia, serif; --font-hand: Caveat, cursive;
 }
 body { font-family: Inter, sans-serif; background: #FCFAF5; color: #232B1D; line-height: 1.6; }
 a { color: #4E5E3C; } a:hover { color: #2F3A28; }

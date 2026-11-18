@@ -27,10 +27,12 @@ export const SOCIAL = {
 export const ABOUT_INTRO =
   "At The Loyal Companion, we believe our four-legged family deserves the same unconditional love they give us every day. From personalized grooming experiences and thoughtfully curated nutrition to wellness essentials and everyday little luxuries, everything we do comes from the heart. With a dedicated team who cares for your companions like their own and a personal pet nutrition consultant to help guide their wellness journey, we're here to make every visit feel special. Our passion is helping your companions look their best, feel their best, and live their happiest, healthiest lives.";
 
-export const REVIEW = {
-  name: "Jenna M.",
-  text: "Amazing experience! Extremely efficient, kind and intentional! Absolutely loved my experience and will be back. They were even short a person today and were willing to still squeeze in our pup!",
-};
+export const REVIEWS = [
+  { name: "Jenna M.", text: "Amazing experience! Extremely efficient, kind and intentional! Absolutely loved my experience and will be back. They were even short a person today and were willing to still squeeze in our pup!" },
+  { name: "Kristin A.", text: "I used their store. There are a lot of high quality products, including Dog food that i know is good for my dog. And helpful staff member." },
+  { name: "Haley C.", text: "1 stop shop for all things dog. Amazing health and wellness advice and supplies, top-notch grooming. A wonderful place to take your dog for anything it may need." },
+];
+export const REVIEW = REVIEWS[0];
 
 export const GROOMING_INTRO =
   "We believe grooming should be more than a fresh haircut. It's about comfort, connection, and thoughtful care that leaves your companion feeling just as wonderful as they look.";
@@ -172,6 +174,7 @@ export const CREW: Member[] = [
   {
     name: "Sam",
     role: "Lead Groomer & Fluff Officer",
+    img: "/images/logo-circle.png",
     bio: [
       "Hi! I’m Sam! I’ve been grooming for 13 years, and I still love getting to know all the different personalities that come through the door. Every dog is different, and that’s definitely part of what keeps grooming fun for me!",
       "Some of my favorite breeds to groom are Schnauzers and Pomeranians. I also have a huge soft spot for bully breeds.",

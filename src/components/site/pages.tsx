@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from "react";
+import type { Member } from "@/content/site";
 import { Header, Footer, Cta, Paw, PawBullet, Underline, SCALLOP, h2 } from "./sections";
 import {
   GROOMING_INTRO, EXPERIENCE, PRICES, UPGRADES, UPGRADES_INTRO, UPGRADES_SUB, UPGRADES_HELP, GLOWUPS,
@@ -20,7 +21,7 @@ function PageHero({ kicker, title, word, intro, img, imgAlt }: { kicker: string;
     <section className="max-w-[1200px] mx-auto px-6 py-14 flex flex-wrap gap-12 items-center">
       <div className="flex-[1_1_480px] min-w-0">
         <p className="mb-2 font-hand text-[28px] text-plum">{kicker}</p>
-        <h1 className="mb-5 font-serif font-bold text-[clamp(34px,6vw,52px)] leading-[1.12]">{title} <Underline>{word}</Underline></h1>
+        <h1 className="mb-5 font-serif font-semibold text-[clamp(40px,6.5vw,62px)] leading-[1.05]">{title} <Underline>{word}</Underline></h1>
         <p className="mb-7 text-lg text-body">{intro}</p>
         <Cta className="px-[30px] py-4 text-[17px]">Book Your Grooming Appointment</Cta>
       </div>
@@ -33,7 +34,7 @@ function PageHero({ kicker, title, word, intro, img, imgAlt }: { kicker: string;
 
 function SageBand({ children }: { children: ReactNode }) {
   return (
-    <section className="trail-light bg-sage text-white">
+    <section className="bg-sage text-white">
       <svg viewBox="0 0 1440 40" preserveAspectRatio="none" aria-hidden="true" className="block w-full h-10 bg-cream"><path d={SCALLOP} fill="#5F704A" /></svg>
       <div className="max-w-[1200px] mx-auto px-6 pt-12 pb-[72px]">{children}</div>
     </section>
@@ -42,7 +43,7 @@ function SageBand({ children }: { children: ReactNode }) {
 
 function FinalBand({ title }: { title: string }) {
   return (
-    <section className="trail px-6 py-16 text-center">
+    <section className="px-6 py-16 text-center">
       <h2 className={`${h2} mb-3`}>{title}</h2>
       <p className="mb-6 text-body">Call or text <a href={PHONE_HREF} className="font-bold">{PHONE}</a> to schedule — or book online.</p>
       <Cta className="px-[34px] py-[18px] text-lg">Book Grooming</Cta>
@@ -66,7 +67,7 @@ export function GroomingPage() {
                 <img src={e.img} alt={e.name} className="w-full h-[200px] object-cover" />
                 <div className="p-6">
                   <p className="font-hand text-[22px] text-plum">{e.tier}</p>
-                  <h3 className="font-serif text-[24px] font-bold leading-tight">{e.name}</h3>
+                  <h3 className="font-serif text-[28px] font-bold leading-tight">{e.name}</h3>
                   <p className="font-semibold text-olive mb-2">{e.sub}</p>
                   <p className="text-[15px] text-body">{e.text}</p>
                 </div>
@@ -85,7 +86,7 @@ export function GroomingPage() {
         <div className="mt-12 grid md:grid-cols-2 gap-6">
           {PRICES.map((g) => (
             <div key={g.title} className="bg-white border border-line rounded-[22px] p-7">
-              <h3 className="font-serif text-[24px] font-bold leading-tight">{g.title}</h3>
+              <h3 className="font-serif text-[28px] font-bold leading-tight">{g.title}</h3>
               {g.sub && <p className="font-semibold text-olive">{g.sub}</p>}
               {g.desc && <p className="mt-2 text-[15px] text-body">{g.desc}</p>}
               <dl className="mt-4">
@@ -110,7 +111,7 @@ export function GroomingPage() {
           {UPGRADES.map(([t, d]) => (
             <div key={t} className="bg-white/[0.12] rounded-[20px] p-6">
               <Paw size={22} style={{ fill: "#F2D98B" }} />
-              <h3 className="mt-3 font-serif text-[20px] font-semibold leading-snug">{t}</h3>
+              <h3 className="mt-3 font-serif text-[24px] font-semibold leading-snug">{t}</h3>
               <p className="mt-2 text-[15px] text-white/90">{d}</p>
             </div>
           ))}
@@ -144,37 +145,47 @@ export function GroomingPage() {
 }
 
 /* ---------------- About ---------------- */
+function CrewCard({ m }: { m: Member }) {
+  const [open, setOpen] = useState(false);
+  const isLogo = m.img?.includes("logo-circle");
+  const [first, ...rest] = m.bio;
+  return (
+    <article id={m.name.toLowerCase()} className="scroll-mt-6 flex flex-col bg-white border border-line rounded-[22px] overflow-hidden">
+      <div className="aspect-[4/5] w-full bg-mist">
+        <img src={m.img} alt={isLogo ? "The Loyal Companion logo" : m.name} className={`h-full w-full ${isLogo ? "object-contain p-10" : "object-cover"}`} />
+      </div>
+      <div className="flex flex-1 flex-col p-6">
+        <h3 className="font-serif text-[34px] font-semibold leading-none">{m.name}</h3>
+        <p className="mt-1 font-hand text-[24px] leading-tight text-plum">{m.role}</p>
+        <div className="mt-3 text-[15px] text-body">
+          <p>{first}</p>
+          {open && rest.map((p) => <p key={p.slice(0, 24)} className="mt-3">{p}</p>)}
+        </div>
+        {rest.length > 0 && (
+          <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} className="mt-4 self-start font-bold text-olive underline-offset-4 hover:underline">
+            {open ? "Show less" : `Read ${m.name}'s full story →`}
+          </button>
+        )}
+      </div>
+    </article>
+  );
+}
+
 export function AboutPage() {
+  const people = CREW.filter((m) => !["Dexter", "Cooper"].includes(m.name));
+  const dogs = CREW.filter((m) => ["Dexter", "Cooper"].includes(m.name));
+  const grid = "grid items-start gap-6 [grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))]";
   return (
     <Shell>
-      <PageHero kicker="About us" title="The Heart Behind" word="The Loyal Companion" intro={ABOUT_INTRO} img="/images/team-ashley.jpg" imgAlt="Ashley, owner of The Loyal Companion" />
+      <PageHero kicker="About us" title="The Heart Behind" word="The Loyal Companion" intro={ABOUT_INTRO} img="/images/glowup-patch.jpg" imgAlt="Patch, freshly groomed" />
       <SageBand>
         <h2 className={h2}>Meet the Loyal Crew</h2>
         <p className="mt-2 text-white/90">The people (and Labs) who'll take care of your dog.</p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          {CREW.map((m) => <a key={m.name} href={`#${m.name.toLowerCase()}`} className="!text-white bg-white/[0.12] rounded-full px-4 py-2 font-semibold no-underline">{m.name}</a>)}
-        </div>
       </SageBand>
-      <section className="max-w-[1100px] mx-auto px-6 py-16">
-        {CREW.map((m, i) => (
-          <article id={m.name.toLowerCase()} key={m.name} className="scroll-mt-6 grid md:grid-cols-[300px_1fr] gap-8 items-start py-12 border-b border-line last:border-b-0">
-            <div className={i % 2 ? "md:order-2" : ""}>
-              {m.img ? (
-                <img src={m.img} alt={m.name} className="w-full aspect-[4/5] object-cover rounded-[150px_150px_22px_22px]" />
-              ) : (
-                <div className="trail w-full aspect-[4/5] rounded-[150px_150px_22px_22px] bg-mist flex flex-col items-center justify-center">
-                  <Paw size={72} style={{ fill: "#5F704A" }} />
-                  <span className="mt-4 font-serif text-3xl font-bold text-olive">{m.name}</span>
-                </div>
-              )}
-            </div>
-            <div>
-              <h3 className="font-serif text-[clamp(30px,4vw,40px)] font-bold leading-tight">{m.name}</h3>
-              <p className="font-hand text-[26px] text-plum mb-4">{m.role}</p>
-              <div className="text-[17px] text-body">{m.bio.map((p) => <p key={p.slice(0, 24)} className="mb-4">{p}</p>)}</div>
-            </div>
-          </article>
-        ))}
+      <section className="max-w-[1200px] mx-auto px-6 py-16">
+        <div className={grid}>{people.map((m) => <CrewCard key={m.name} m={m} />)}</div>
+        <h2 className={`${h2} mt-20 mb-8`}>Our chief testers</h2>
+        <div className={grid}>{dogs.map((m) => <CrewCard key={m.name} m={m} />)}</div>
       </section>
       <FinalBand title="We can't wait to meet you and your four-legged family." />
     </Shell>
@@ -191,17 +202,17 @@ export function ContactPage() {
       <section className="bg-white border-y border-line px-6 py-20">
         <div className="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-8 items-start">
           <div>
-            <h2 className="font-serif text-[22px] font-bold">Location</h2>
+            <h2 className="font-serif text-[26px] font-bold">Location</h2>
             <p className="mb-5"><a href="https://maps.google.com/?q=55+W+Main+St+Platteville+WI+53818" target="_blank" rel="noopener">{ADDRESS}</a></p>
-            <h2 className="font-serif text-[22px] font-bold">Phone</h2>
+            <h2 className="font-serif text-[26px] font-bold">Phone</h2>
             <p className="mb-5"><a href={PHONE_HREF}>{PHONE}</a> · call or text</p>
-            <h2 className="font-serif text-[22px] font-bold">Email</h2>
+            <h2 className="font-serif text-[26px] font-bold">Email</h2>
             <p className="mb-5 break-all"><a href={`mailto:${EMAIL}?subject=Website%20Inquiry`}>{EMAIL}</a></p>
-            <h2 className="font-serif text-[22px] font-bold mb-2">Store Hours</h2>
+            <h2 className="font-serif text-[26px] font-bold mb-2">Store Hours</h2>
             <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-[15px] mb-6">
               {HOURS.map(([d, h]) => <div key={d} className="contents"><span className="font-semibold">{d}</span><span>{h}</span></div>)}
             </div>
-            <h2 className="font-serif text-[22px] font-bold mb-2">Connect with us!</h2>
+            <h2 className="font-serif text-[26px] font-bold mb-2">Connect with us!</h2>
             <p className="flex flex-wrap gap-4 font-semibold">
               <a href={SOCIAL.facebook} target="_blank" rel="noopener">Facebook</a>
               <a href={SOCIAL.instagram} target="_blank" rel="noopener">Instagram</a>
@@ -209,7 +220,7 @@ export function ContactPage() {
             </p>
           </div>
           <form className="bg-cream border border-line rounded-[22px] p-7 flex flex-col gap-3" onSubmit={(e) => { e.preventDefault(); /* TODO: wire form submission in the repo */ setSent(true); }}>
-            <h2 className="font-serif text-[24px] font-bold">Send us a message</h2>
+            <h2 className="font-serif text-[28px] font-bold">Send us a message</h2>
             {sent ? <p className="text-lg font-semibold text-olive">Thanks for submitting!</p> : (
               <>
                 <div className="grid sm:grid-cols-2 gap-3">
