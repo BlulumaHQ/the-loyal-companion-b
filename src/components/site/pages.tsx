@@ -151,8 +151,8 @@ function CrewCard({ m }: { m: Member }) {
   const [first, ...rest] = m.bio;
   return (
     <article id={m.name.toLowerCase()} className="scroll-mt-6 flex flex-col bg-white border border-line rounded-[22px] overflow-hidden">
-      <div className="aspect-[4/5] w-full bg-mist">
-        <img src={m.img} alt={isLogo ? "The Loyal Companion logo" : m.name} className={`h-full w-full ${isLogo ? "object-contain p-10" : "object-cover"}`} />
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-mist">
+        <img src={m.img} alt={isLogo ? "The Loyal Companion logo" : m.name} className={`absolute inset-0 h-full w-full ${isLogo ? "object-contain p-10" : "object-cover"}`} />
       </div>
       <div className="flex flex-1 flex-col p-6">
         <h3 className="font-serif text-[34px] font-semibold leading-none">{m.name}</h3>
